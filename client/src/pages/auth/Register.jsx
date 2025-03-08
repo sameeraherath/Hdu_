@@ -13,7 +13,7 @@ import {
   FormControl,
   Link as MuiLink,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [role, setRole] = useState("Consultant");
@@ -31,6 +31,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = (field) => (e) => {
     setFormData((prev) => ({
@@ -307,6 +308,7 @@ const Register = () => {
       };
       await register(userData);
       window.alert("Registration successful!");
+      navigate("/login");
     } catch (err) {
       setError("Registration failed. Username or email may already exist.");
       window.alert("Registration failed! Please try again.");
