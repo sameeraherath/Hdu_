@@ -22,8 +22,10 @@ const Login = () => {
     setError("");
     try {
       await login({ username, password });
+      window.alert("Login successful!");
     } catch (err) {
       setError("Invalid username or password");
+      window.alert("Login failed! Please try again.");
       console.error(err);
     }
   };

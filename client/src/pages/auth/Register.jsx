@@ -306,8 +306,10 @@ const Register = () => {
         ...(role === "Nurse" ? { grade: formData.grade } : {}),
       };
       await register(userData);
+      window.alert("Registration successful!");
     } catch (err) {
       setError("Registration failed. Username or email may already exist.");
+      window.alert("Registration failed! Please try again.");
       console.error(err);
     }
   };

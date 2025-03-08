@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       redirectToDashboard(role);
     } catch (err) {
       console.error("Registration failed:", err);
+
       throw err;
     }
   };
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
       setRole(role);
       setUser({ role });
+
       redirectToDashboard(role);
     } catch (err) {
       console.error("Login failed:", err);
