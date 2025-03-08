@@ -29,8 +29,24 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
+    <Container
+      maxWidth="xs"
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          borderRadius: "16px",
+          width: "100%",
+          maxWidth: "400px",
+        }}
+      >
         <Typography variant="h5" align="center" gutterBottom>
           Login
         </Typography>
@@ -48,6 +64,10 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            sx={{
+              borderRadius: "8px",
+              mb: 2,
+            }}
           />
           <TextField
             label="Password"
@@ -58,13 +78,21 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            sx={{
+              borderRadius: "8px",
+              mb: 2,
+            }}
           />
           <Button
             type="submit"
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: "8px",
+              padding: "12px",
+            }}
           >
             Login
           </Button>

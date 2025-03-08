@@ -21,13 +21,13 @@ const Register = () => {
     name: "",
     username: "",
     password: "",
-    trainingHospital: "", // House Officer
-    specialization: "", // Medical Officer
-    licenseNumber: "", // Medical Officer
-    wardAssignment: "", // Nurse
-    shiftPreference: "", // Nurse
-    yearsOfExperience: "", // Consultant
-    department: "", // Consultant
+    trainingHospital: "",
+    specialization: "",
+    licenseNumber: "",
+    wardAssignment: "",
+    shiftPreference: "",
+    yearsOfExperience: "",
+    department: "",
   });
   const [error, setError] = useState("");
   const { register } = useAuth();
@@ -52,6 +52,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleInputChange("name")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Username"
@@ -61,6 +62,7 @@ const Register = () => {
               value={formData.username}
               onChange={handleInputChange("username")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Password"
@@ -71,6 +73,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleInputChange("password")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Training Hospital"
@@ -80,6 +83,7 @@ const Register = () => {
               value={formData.trainingHospital}
               onChange={handleInputChange("trainingHospital")}
               required
+              sx={{ borderRadius: 3 }}
             />
           </>
         );
@@ -94,6 +98,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleInputChange("name")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Username"
@@ -103,6 +108,7 @@ const Register = () => {
               value={formData.username}
               onChange={handleInputChange("username")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Password"
@@ -113,6 +119,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleInputChange("password")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Specialization"
@@ -122,6 +129,7 @@ const Register = () => {
               value={formData.specialization}
               onChange={handleInputChange("specialization")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="License Number"
@@ -131,6 +139,7 @@ const Register = () => {
               value={formData.licenseNumber}
               onChange={handleInputChange("licenseNumber")}
               required
+              sx={{ borderRadius: 3 }}
             />
           </>
         );
@@ -145,6 +154,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleInputChange("name")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Username"
@@ -154,6 +164,7 @@ const Register = () => {
               value={formData.username}
               onChange={handleInputChange("username")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Password"
@@ -164,6 +175,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleInputChange("password")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Ward Assignment"
@@ -173,13 +185,15 @@ const Register = () => {
               value={formData.wardAssignment}
               onChange={handleInputChange("wardAssignment")}
               required
+              sx={{ borderRadius: 3 }}
             />
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal" sx={{ borderRadius: 3 }}>
               <InputLabel>Shift Preference</InputLabel>
               <Select
                 value={formData.shiftPreference}
                 onChange={handleInputChange("shiftPreference")}
                 label="Shift Preference"
+                sx={{ borderRadius: 3 }}
               >
                 <MenuItem value="Day">Day</MenuItem>
                 <MenuItem value="Night">Night</MenuItem>
@@ -198,6 +212,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleInputChange("name")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Username"
@@ -207,6 +222,7 @@ const Register = () => {
               value={formData.username}
               onChange={handleInputChange("username")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Password"
@@ -217,6 +233,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleInputChange("password")}
               required
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Years of Experience"
@@ -227,7 +244,8 @@ const Register = () => {
               value={formData.yearsOfExperience}
               onChange={handleInputChange("yearsOfExperience")}
               required
-              inputProps={{ min: 0 }}
+              InputProps={{ min: 0 }}
+              sx={{ borderRadius: 3 }}
             />
             <TextField
               label="Department"
@@ -237,6 +255,7 @@ const Register = () => {
               value={formData.department}
               onChange={handleInputChange("department")}
               required
+              sx={{ borderRadius: 3 }}
             />
           </>
         );
@@ -283,7 +302,7 @@ const Register = () => {
 
   return (
     <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
+      <Paper elevation={3} sx={{ p: 4, mt: 8, borderRadius: 3 }}>
         <Typography variant="h5" align="center" gutterBottom>
           Register
         </Typography>
@@ -293,12 +312,13 @@ const Register = () => {
           </Typography>
         )}
         <Box component="form" onSubmit={handleSubmit}>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal" sx={{ borderRadius: 3 }}>
             <InputLabel>Role</InputLabel>
             <Select
               value={role}
               onChange={(e) => setRole(e.target.value)}
               label="Role"
+              sx={{ borderRadius: 3 }}
             >
               <MenuItem value="House Officer">House Officer</MenuItem>
               <MenuItem value="Medical Officer">Medical Officer</MenuItem>
@@ -312,7 +332,12 @@ const Register = () => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: 3,
+              boxShadow: 2,
+              ":hover": { boxShadow: 4 },
+            }}
           >
             Register
           </Button>
