@@ -1,35 +1,49 @@
 import { genSalt, hash, compare } from "bcryptjs";
-import jwt from "jsonwebtoken"; // Import entire module as `jwt`
-const { sign } = jwt; // Destructure `sign`
-import User from "../models/User.js"; // Import User model
+import jwt from "jsonwebtoken";
+const { sign } = jwt;
+import User from "../models/User.js";
 
 export async function register(req, res) {
   const {
-    name,
     username,
     password,
+    email,
+    registrationNumber,
+    ward,
+    mobileNumber,
+    sex,
     role,
-    trainingHospital,
-    specialization,
-    licenseNumber,
-    wardAssignment,
-    shiftPreference,
-    yearsOfExperience,
-    department,
+    nameWithInitials,
+    speciality,
+    grade,
   } = req.body;
+
   try {
-    let user = await User.findOne({ username }); // Use `User.findOne`
-    if (user) return res.status(400).json({ msg: "Username already exists" });
+    let user = await User.findOne({ $or: [{ username }, { email }] });
+    if (user) {
+      if (user.username === username) {
+        return res.status(400).json({ msg: "Username already exists" });
+      }
+      if (user.email === email) {
+        return res.status(400).json({ msg: "Email already exists" });
+      }
+    }
 
     user = new User({
-      name,
       username,
       password,
+      email,
+      registrationNumber,
+      ward,
+      mobileNumber,
+      sex,
       role,
-      ...(role === "House Officer" && { trainingHospital }),
-      ...(role === "Medical Officer" && { specialization, licenseNumber }),
-      ...(role === "Nurse" && { wardAssignment, shiftPreference }),
-      ...(role === "Consultant" && { yearsOfExperience, department }),
+      ...(role === "House Officer" ||
+      role === "Medical Officer" ||
+      role === "Consultant"
+        ? { nameWithInitials, speciality }
+        : {}),
+      ...(role === "Nurse" ? { grade } : {}),
     });
 
     const salt = await genSalt(10);
@@ -50,7 +64,7 @@ export async function register(req, res) {
 export async function login(req, res) {
   const { username, password } = req.body;
   try {
-    let user = await User.findOne({ username }); // Use `User.findOne`
+    let user = await User.findOne({ username });
     if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     const isMatch = await compare(password, user.password);
