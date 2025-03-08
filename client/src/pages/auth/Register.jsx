@@ -14,6 +14,7 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { MuiTelInput } from "mui-tel-input";
 
 const Register = () => {
   const [role, setRole] = useState("Consultant");
@@ -37,6 +38,13 @@ const Register = () => {
     setFormData((prev) => ({
       ...prev,
       [field]: e.target.value,
+    }));
+  };
+
+  const handlePhoneChange = (newValue) => {
+    setFormData((prev) => ({
+      ...prev,
+      mobileNumber: newValue,
     }));
   };
 
@@ -85,16 +93,17 @@ const Register = () => {
             <MenuItem value="Side B">Side B</MenuItem>
           </Select>
         </FormControl>
-        <TextField
-          label="Mobile Number"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={formData.mobileNumber}
-          onChange={handleInputChange("mobileNumber")}
-          required
-          sx={{ borderRadius: 3 }}
-        />
+        <Box className="pt-4 pb-4">
+          <MuiTelInput
+            value={formData.mobileNumber}
+            onChange={handlePhoneChange}
+            label="Mobile Number"
+            defaultCountry="LK"
+            forceCallingCode
+            fullWidth
+            required
+          />
+        </Box>
         <TextField
           label="Email"
           variant="outlined"
@@ -189,16 +198,17 @@ const Register = () => {
                 <MenuItem value="Side B">Side B</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              label="Mobile Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.mobileNumber}
-              onChange={handleInputChange("mobileNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
+            <Box className="pt-4 pb-4">
+              <MuiTelInput
+                value={formData.mobileNumber}
+                onChange={handlePhoneChange}
+                label="Mobile Number"
+                defaultCountry="LK"
+                forceCallingCode
+                fullWidth
+                required
+              />
+            </Box>
             <TextField
               label="Email"
               variant="outlined"
