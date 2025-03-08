@@ -19,6 +19,7 @@ const Register = () => {
   const [role, setRole] = useState("Consultant");
   const [formData, setFormData] = useState({
     username: "",
+    password: "",
     nameWithInitials: "",
     registrationNumber: "",
     speciality: "",
@@ -39,97 +40,90 @@ const Register = () => {
   };
 
   const renderFormFields = () => {
+    const commonFields = (
+      <>
+        <TextField
+          label="Username"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={formData.username}
+          onChange={handleInputChange("username")}
+          required
+          sx={{ borderRadius: 3 }}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={formData.password}
+          onChange={handleInputChange("password")}
+          required
+          sx={{ borderRadius: 3 }}
+        />
+        <TextField
+          label="Registration Number"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={formData.registrationNumber}
+          onChange={handleInputChange("registrationNumber")}
+          required
+          sx={{ borderRadius: 3 }}
+        />
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Ward</InputLabel>
+          <Select
+            value={formData.ward}
+            onChange={handleInputChange("ward")}
+            label="Ward"
+          >
+            <MenuItem value="Side A">Side A</MenuItem>
+            <MenuItem value="Side B">Side B</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          label="Mobile Number"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={formData.mobileNumber}
+          onChange={handleInputChange("mobileNumber")}
+          required
+          sx={{ borderRadius: 3 }}
+        />
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={formData.email}
+          onChange={handleInputChange("email")}
+          required
+          sx={{ borderRadius: 3 }}
+        />
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Sex</InputLabel>
+          <Select
+            value={formData.sex}
+            onChange={handleInputChange("sex")}
+            label="Sex"
+            required
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </Select>
+        </FormControl>
+      </>
+    );
+
     switch (role) {
       case "House Officer":
-        return (
-          <>
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.username}
-              onChange={handleInputChange("username")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Name With Initials"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.nameWithInitials}
-              onChange={handleInputChange("nameWithInitials")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Registration Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.registrationNumber}
-              onChange={handleInputChange("registrationNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Speciality"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.speciality}
-              onChange={handleInputChange("speciality")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Ward</InputLabel>
-              <Select
-                value={formData.ward}
-                onChange={handleInputChange("ward")}
-                label="Ward"
-              >
-                <MenuItem value="Side A">Side A</MenuItem>
-                <MenuItem value="Side B">Side B</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Mobile Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.mobileNumber}
-              onChange={handleInputChange("mobileNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.email}
-              onChange={handleInputChange("email")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Sex</InputLabel>
-              <Select
-                value={formData.sex}
-                onChange={handleInputChange("sex")}
-                label="Sex"
-                required
-              >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </>
-        );
       case "Medical Officer":
+      case "Consultant":
         return (
           <>
             <TextField
@@ -149,6 +143,17 @@ const Register = () => {
               margin="normal"
               value={formData.nameWithInitials}
               onChange={handleInputChange("nameWithInitials")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.password}
+              onChange={handleInputChange("password")}
               required
               sx={{ borderRadius: 3 }}
             />
@@ -221,57 +226,7 @@ const Register = () => {
       case "Nurse":
         return (
           <>
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.username}
-              onChange={handleInputChange("username")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Registration Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.registrationNumber}
-              onChange={handleInputChange("registrationNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Ward</InputLabel>
-              <Select
-                value={formData.ward}
-                onChange={handleInputChange("ward")}
-                label="Ward"
-              >
-                <MenuItem value="Side A">Side A</MenuItem>
-                <MenuItem value="Side B">Side B</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Mobile Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.mobileNumber}
-              onChange={handleInputChange("mobileNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.email}
-              onChange={handleInputChange("email")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
+            {commonFields}
             <FormControl fullWidth margin="normal">
               <InputLabel>Grade</InputLabel>
               <Select
@@ -320,109 +275,6 @@ const Register = () => {
                 </MenuItem>
               </Select>
             </FormControl>
-
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Sex</InputLabel>
-              <Select
-                value={formData.sex}
-                onChange={handleInputChange("sex")}
-                label="Sex"
-                required
-              >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
-          </>
-        );
-      case "Consultant":
-        return (
-          <>
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.username}
-              onChange={handleInputChange("username")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Name With Initials"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.nameWithInitials}
-              onChange={handleInputChange("nameWithInitials")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Registration Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.registrationNumber}
-              onChange={handleInputChange("registrationNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Speciality"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.speciality}
-              onChange={handleInputChange("speciality")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Ward</InputLabel>
-              <Select
-                value={formData.ward}
-                onChange={handleInputChange("ward")}
-                label="Ward"
-              >
-                <MenuItem value="Side A">Side A</MenuItem>
-                <MenuItem value="Side B">Side B</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Mobile Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.mobileNumber}
-              onChange={handleInputChange("mobileNumber")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.email}
-              onChange={handleInputChange("email")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Sex</InputLabel>
-              <Select
-                value={formData.sex}
-                onChange={handleInputChange("sex")}
-                label="Sex"
-                required
-              >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
           </>
         );
       default:
@@ -434,46 +286,28 @@ const Register = () => {
     e.preventDefault();
     setError("");
     try {
-      const userData = { role };
-      if (role === "House Officer") {
-        userData.username = formData.username;
-        userData.nameWithInitials = formData.nameWithInitials;
-        userData.registrationNumber = formData.registrationNumber;
-        userData.speciality = formData.speciality;
-        userData.ward = formData.ward;
-        userData.mobileNumber = formData.mobileNumber;
-        userData.email = formData.email;
-        userData.sex = formData.sex;
-      } else if (role === "Medical Officer") {
-        userData.username = formData.username;
-        userData.nameWithInitials = formData.nameWithInitials;
-        userData.registrationNumber = formData.registrationNumber;
-        userData.speciality = formData.speciality;
-        userData.ward = formData.ward;
-        userData.mobileNumber = formData.mobileNumber;
-        userData.email = formData.email;
-        userData.sex = formData.sex;
-      } else if (role === "Nurse") {
-        userData.username = formData.username;
-        userData.registrationNumber = formData.registrationNumber;
-        userData.ward = formData.ward;
-        userData.mobileNumber = formData.mobileNumber;
-        userData.email = formData.email;
-        userData.grade = formData.grade;
-        userData.sex = formData.sex;
-      } else if (role === "Consultant") {
-        userData.username = formData.username;
-        userData.nameWithInitials = formData.nameWithInitials;
-        userData.registrationNumber = formData.registrationNumber;
-        userData.speciality = formData.speciality;
-        userData.ward = formData.ward;
-        userData.mobileNumber = formData.mobileNumber;
-        userData.email = formData.email;
-        userData.sex = formData.sex;
-      }
+      const userData = {
+        role,
+        username: formData.username,
+        password: formData.password,
+        registrationNumber: formData.registrationNumber,
+        ward: formData.ward,
+        mobileNumber: formData.mobileNumber,
+        email: formData.email,
+        sex: formData.sex,
+        ...(role === "House Officer" ||
+        role === "Medical Officer" ||
+        role === "Consultant"
+          ? {
+              nameWithInitials: formData.nameWithInitials,
+              speciality: formData.speciality,
+            }
+          : {}),
+        ...(role === "Nurse" ? { grade: formData.grade } : {}),
+      };
       await register(userData);
     } catch (err) {
-      setError("Registration failed. Username may already exist.");
+      setError("Registration failed. Username or email may already exist.");
       console.error(err);
     }
   };
