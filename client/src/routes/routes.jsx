@@ -1,0 +1,61 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+import HouseOfficerDashboard from "../pages/HouseOfficerDashboard";
+import MedicalOfficerDashboard from "../pages/MedicalOfficerDashboard";
+import NurseDashboard from "../pages/NurseDashboard";
+import ConsultantDashboard from "../pages/ConsultantDashboard";
+import { useAuth } from "../context/useAuth";
+
+const ProtectedRoute = ({ role, children }) => {
+  const { role: userRole } = useAuth();
+  if (!userRole || userRole !== role) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/house-officer-dashboard"
+        element={
+          <ProtectedRoute role="House Officer">
+            <HouseOfficerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medical-officer-dashboard"
+        element={
+          <ProtectedRoute role="Medical Officer">
+            <MedicalOfficerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/nurse-dashboard"
+        element={
+          <ProtectedRoute role="Nurse">
+            <NurseDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/consultant-dashboard"
+        element={
+          <ProtectedRoute role="Consultant">
+            <ConsultantDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
+  );
+};
+
+export default AppRoutes;
