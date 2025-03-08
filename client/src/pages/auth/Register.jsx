@@ -16,18 +16,17 @@ import {
 import { Link } from "react-router-dom";
 
 const Register = () => {
-  const [role, setRole] = useState("House Officer");
+  const [role, setRole] = useState("Consultant");
   const [formData, setFormData] = useState({
-    name: "",
     username: "",
-    password: "",
-    trainingHospital: "",
-    specialization: "",
-    licenseNumber: "",
-    wardAssignment: "",
-    shiftPreference: "",
-    yearsOfExperience: "",
-    department: "",
+    nameWithInitials: "",
+    registrationNumber: "",
+    speciality: "",
+    ward: "",
+    mobileNumber: "",
+    email: "",
+    sex: "",
+    grade: "",
   });
   const [error, setError] = useState("");
   const { register } = useAuth();
@@ -45,16 +44,6 @@ const Register = () => {
         return (
           <>
             <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.name}
-              onChange={handleInputChange("name")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
               label="Username"
               variant="outlined"
               fullWidth
@@ -65,42 +54,85 @@ const Register = () => {
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Password"
-              type="password"
+              label="Name With Initials"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.password}
-              onChange={handleInputChange("password")}
+              value={formData.nameWithInitials}
+              onChange={handleInputChange("nameWithInitials")}
               required
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Training Hospital"
+              label="Registration Number"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.trainingHospital}
-              onChange={handleInputChange("trainingHospital")}
+              value={formData.registrationNumber}
+              onChange={handleInputChange("registrationNumber")}
               required
               sx={{ borderRadius: 3 }}
             />
+            <TextField
+              label="Speciality"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.speciality}
+              onChange={handleInputChange("speciality")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Ward</InputLabel>
+              <Select
+                value={formData.ward}
+                onChange={handleInputChange("ward")}
+                label="Ward"
+              >
+                <MenuItem value="Side A">Side A</MenuItem>
+                <MenuItem value="Side B">Side B</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Mobile Number"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.mobileNumber}
+              onChange={handleInputChange("mobileNumber")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.email}
+              onChange={handleInputChange("email")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Sex</InputLabel>
+              <Select
+                value={formData.sex}
+                onChange={handleInputChange("sex")}
+                label="Sex"
+                required
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
           </>
         );
       case "Medical Officer":
         return (
           <>
             <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.name}
-              onChange={handleInputChange("name")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
               label="Username"
               variant="outlined"
               fullWidth
@@ -111,52 +143,85 @@ const Register = () => {
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Password"
-              type="password"
+              label="Name With Initials"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.password}
-              onChange={handleInputChange("password")}
+              value={formData.nameWithInitials}
+              onChange={handleInputChange("nameWithInitials")}
               required
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Specialization"
+              label="Registration Number"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.specialization}
-              onChange={handleInputChange("specialization")}
+              value={formData.registrationNumber}
+              onChange={handleInputChange("registrationNumber")}
               required
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="License Number"
+              label="Speciality"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.licenseNumber}
-              onChange={handleInputChange("licenseNumber")}
+              value={formData.speciality}
+              onChange={handleInputChange("speciality")}
               required
               sx={{ borderRadius: 3 }}
             />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Ward</InputLabel>
+              <Select
+                value={formData.ward}
+                onChange={handleInputChange("ward")}
+                label="Ward"
+              >
+                <MenuItem value="Side A">Side A</MenuItem>
+                <MenuItem value="Side B">Side B</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Mobile Number"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.mobileNumber}
+              onChange={handleInputChange("mobileNumber")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.email}
+              onChange={handleInputChange("email")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Sex</InputLabel>
+              <Select
+                value={formData.sex}
+                onChange={handleInputChange("sex")}
+                label="Sex"
+                required
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
           </>
         );
       case "Nurse":
         return (
           <>
             <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.name}
-              onChange={handleInputChange("name")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
               label="Username"
               variant="outlined"
               fullWidth
@@ -167,36 +232,106 @@ const Register = () => {
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Password"
-              type="password"
+              label="Registration Number"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.password}
-              onChange={handleInputChange("password")}
+              value={formData.registrationNumber}
+              onChange={handleInputChange("registrationNumber")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Ward</InputLabel>
+              <Select
+                value={formData.ward}
+                onChange={handleInputChange("ward")}
+                label="Ward"
+              >
+                <MenuItem value="Side A">Side A</MenuItem>
+                <MenuItem value="Side B">Side B</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Mobile Number"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.mobileNumber}
+              onChange={handleInputChange("mobileNumber")}
               required
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Ward Assignment"
+              label="Email"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.wardAssignment}
-              onChange={handleInputChange("wardAssignment")}
+              value={formData.email}
+              onChange={handleInputChange("email")}
               required
               sx={{ borderRadius: 3 }}
             />
-            <FormControl fullWidth margin="normal" sx={{ borderRadius: 3 }}>
-              <InputLabel>Shift Preference</InputLabel>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Grade</InputLabel>
               <Select
-                value={formData.shiftPreference}
-                onChange={handleInputChange("shiftPreference")}
-                label="Shift Preference"
-                sx={{ borderRadius: 3 }}
+                value={formData.grade}
+                onChange={handleInputChange("grade")}
+                label="Grade"
               >
-                <MenuItem value="Day">Day</MenuItem>
-                <MenuItem value="Night">Night</MenuItem>
+                <MenuItem value="Student Nurse (Trainee Nurse)">
+                  Student Nurse (Trainee Nurse)
+                </MenuItem>
+                <MenuItem value="Registered Nurse (RN)">
+                  Registered Nurse (RN)
+                </MenuItem>
+                <MenuItem value="Grade II Nursing Officer (Staff Nurse)">
+                  Grade II Nursing Officer (Staff Nurse)
+                </MenuItem>
+                <MenuItem value="Grade I Nursing Officer (Senior Staff Nurse)">
+                  Grade I Nursing Officer (Senior Staff Nurse)
+                </MenuItem>
+                <MenuItem value="Supra Grade Nursing Officer (Supervisory Nurse)">
+                  Supra Grade Nursing Officer (Supervisory Nurse)
+                </MenuItem>
+                <MenuItem value="Nursing Sister (Ward Sister / In-Charge Nurse)">
+                  Nursing Sister (Ward Sister / In-Charge Nurse)
+                </MenuItem>
+                <MenuItem value="Matron / Chief Nursing Officer (CNO)">
+                  Matron / Chief Nursing Officer (CNO)
+                </MenuItem>
+                <MenuItem value="Director of Nursing Services">
+                  Director of Nursing Services
+                </MenuItem>
+                <MenuItem value="Public Health Nursing Officer (PHNO)">
+                  Public Health Nursing Officer (PHNO)
+                </MenuItem>
+                <MenuItem value="Midwife / Nurse Midwife">
+                  Midwife / Nurse Midwife
+                </MenuItem>
+                <MenuItem value="School Health Nurse">
+                  School Health Nurse
+                </MenuItem>
+                <MenuItem value="Occupational Health Nurse">
+                  Occupational Health Nurse
+                </MenuItem>
+                <MenuItem value="ICU / Critical Care Nurse">
+                  ICU / Critical Care Nurse
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Sex</InputLabel>
+              <Select
+                value={formData.sex}
+                onChange={handleInputChange("sex")}
+                label="Sex"
+                required
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
           </>
@@ -205,16 +340,6 @@ const Register = () => {
         return (
           <>
             <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.name}
-              onChange={handleInputChange("name")}
-              required
-              sx={{ borderRadius: 3 }}
-            />
-            <TextField
               label="Username"
               variant="outlined"
               fullWidth
@@ -225,38 +350,79 @@ const Register = () => {
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Password"
-              type="password"
+              label="Name With Initials"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.password}
-              onChange={handleInputChange("password")}
+              value={formData.nameWithInitials}
+              onChange={handleInputChange("nameWithInitials")}
               required
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Years of Experience"
-              type="number"
+              label="Registration Number"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.yearsOfExperience}
-              onChange={handleInputChange("yearsOfExperience")}
+              value={formData.registrationNumber}
+              onChange={handleInputChange("registrationNumber")}
               required
-              InputProps={{ min: 0 }}
               sx={{ borderRadius: 3 }}
             />
             <TextField
-              label="Department"
+              label="Speciality"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={formData.department}
-              onChange={handleInputChange("department")}
+              value={formData.speciality}
+              onChange={handleInputChange("speciality")}
               required
               sx={{ borderRadius: 3 }}
             />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Ward</InputLabel>
+              <Select
+                value={formData.ward}
+                onChange={handleInputChange("ward")}
+                label="Ward"
+              >
+                <MenuItem value="Side A">Side A</MenuItem>
+                <MenuItem value="Side B">Side B</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Mobile Number"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.mobileNumber}
+              onChange={handleInputChange("mobileNumber")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={formData.email}
+              onChange={handleInputChange("email")}
+              required
+              sx={{ borderRadius: 3 }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Sex</InputLabel>
+              <Select
+                value={formData.sex}
+                onChange={handleInputChange("sex")}
+                label="Sex"
+                required
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
           </>
         );
       default:
@@ -270,28 +436,40 @@ const Register = () => {
     try {
       const userData = { role };
       if (role === "House Officer") {
-        userData.name = formData.name;
         userData.username = formData.username;
-        userData.password = formData.password;
-        userData.trainingHospital = formData.trainingHospital;
+        userData.nameWithInitials = formData.nameWithInitials;
+        userData.registrationNumber = formData.registrationNumber;
+        userData.speciality = formData.speciality;
+        userData.ward = formData.ward;
+        userData.mobileNumber = formData.mobileNumber;
+        userData.email = formData.email;
+        userData.sex = formData.sex;
       } else if (role === "Medical Officer") {
-        userData.name = formData.name;
         userData.username = formData.username;
-        userData.password = formData.password;
-        userData.specialization = formData.specialization;
-        userData.licenseNumber = formData.licenseNumber;
+        userData.nameWithInitials = formData.nameWithInitials;
+        userData.registrationNumber = formData.registrationNumber;
+        userData.speciality = formData.speciality;
+        userData.ward = formData.ward;
+        userData.mobileNumber = formData.mobileNumber;
+        userData.email = formData.email;
+        userData.sex = formData.sex;
       } else if (role === "Nurse") {
-        userData.name = formData.name;
         userData.username = formData.username;
-        userData.password = formData.password;
-        userData.wardAssignment = formData.wardAssignment;
-        userData.shiftPreference = formData.shiftPreference;
+        userData.registrationNumber = formData.registrationNumber;
+        userData.ward = formData.ward;
+        userData.mobileNumber = formData.mobileNumber;
+        userData.email = formData.email;
+        userData.grade = formData.grade;
+        userData.sex = formData.sex;
       } else if (role === "Consultant") {
-        userData.name = formData.name;
         userData.username = formData.username;
-        userData.password = formData.password;
-        userData.yearsOfExperience = formData.yearsOfExperience;
-        userData.department = formData.department;
+        userData.nameWithInitials = formData.nameWithInitials;
+        userData.registrationNumber = formData.registrationNumber;
+        userData.speciality = formData.speciality;
+        userData.ward = formData.ward;
+        userData.mobileNumber = formData.mobileNumber;
+        userData.email = formData.email;
+        userData.sex = formData.sex;
       }
       await register(userData);
     } catch (err) {
@@ -320,10 +498,10 @@ const Register = () => {
               label="Role"
               sx={{ borderRadius: 3 }}
             >
-              <MenuItem value="House Officer">House Officer</MenuItem>
-              <MenuItem value="Medical Officer">Medical Officer</MenuItem>
-              <MenuItem value="Nurse">Nurse</MenuItem>
               <MenuItem value="Consultant">Consultant</MenuItem>
+              <MenuItem value="Medical Officer">Medical Officer</MenuItem>
+              <MenuItem value="House Officer">House Officer</MenuItem>
+              <MenuItem value="Nurse">Nurse</MenuItem>
             </Select>
           </FormControl>
           {renderFormFields()}
