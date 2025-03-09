@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import { connectMongoDB } from "./config/mongoDB.js";
+import { connectMySQL } from "./config/mysqlDB.js";
 
-connectDB();
+//connectMongoDB();
+connectMySQL(); 
 
 dotenv.config();
 const app = express();

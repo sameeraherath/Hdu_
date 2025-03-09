@@ -320,6 +320,7 @@ const Register = () => {
       window.alert("Registration successful!");
       navigate("/login");
     } catch (err) {
+      console.log("🚀 ~ handleSubmit ~ err:", err)
       setError("Registration failed. Username or email may already exist.");
       window.alert("Registration failed! Please try again.");
       console.error(err);
