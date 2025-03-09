@@ -3,7 +3,7 @@ import { config } from "dotenv";
 
 config();
 
-const connectDB = async () => {
+const connectMongoDB = async () => {
   try {
     await connect(process.env.MONGO_URI);
     console.log("MongoDB Connected");
@@ -13,4 +13,6 @@ const connectDB = async () => {
   }
 };
 
-export default connectDB;
+export { connectMongoDB };
+
+
