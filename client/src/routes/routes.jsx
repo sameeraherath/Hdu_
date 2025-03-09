@@ -5,6 +5,7 @@ import Register from "../pages/auth/Register";
 import HouseOfficerDashboard from "../pages/HouseOfficerDashboard";
 import MedicalOfficerDashboard from "../pages/MedicalOfficerDashboard";
 import NurseDashboard from "../pages/NurseDashboard";
+import LandingPage from "../pages/LandingPage";
 import ConsultantDashboard from "../pages/ConsultantDashboard";
 import { useAuth } from "../context/useAuth";
 
@@ -19,6 +20,7 @@ const ProtectedRoute = ({ role, children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
