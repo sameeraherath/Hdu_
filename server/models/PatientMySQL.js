@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 
 const definePatient = (sequelize) => {
   const PatientMySQL = sequelize.define(
-    "Patient",
+    "patients",
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       fullName: { type: DataTypes.STRING, allowNull: false },

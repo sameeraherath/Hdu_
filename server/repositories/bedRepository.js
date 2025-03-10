@@ -1,5 +1,4 @@
-import BedMySQL from "../models/BedMySQL.js";
-import PatientMySQL from "../models/PatientMySQL.js";
+import { BedMySQL, PatientMySQL } from "../config/mysqlDB.js";
 
 class BedRepository {
   async getAllBeds() {

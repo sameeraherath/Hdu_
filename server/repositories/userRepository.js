@@ -1,13 +1,12 @@
-import UserMySQL from "../models/UserMySQL.js";
-
+import { UserMySQLModel } from "../config/mysqlDB.js";
 
 class UserRepository {
   async findByUsername(username) {
-    return await UserMySQL.findOne({ where: { username } });
+    return await UserMySQLModel.findOne({ where: { username } });
   }
 
   async createUser(userData) {
-    return await UserMySQL.create(userData);
+    return await UserMySQLModel.create(userData);
   }
 }
 
