@@ -1,38 +1,66 @@
-import React from "react";
-import { Container, Typography, Box, Paper, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Typography, Grid2, CircularProgress } from "@mui/material";
+import BedCard from "../components/BedCard";
 
-const DashboardComingSoon = () => {
-  return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#f4f4f4",
-      }}
-    >
-      <Paper
-        elevation={2}
-        sx={{ padding: 4, textAlign: "center", borderRadius: 2 }}
+const NurseDashboard = () => {
+  const [beds, setBeds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+    const fetchBeds = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/beds`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setBeds(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+        console.log(err);
+      }
+    };
+
+    fetchBeds();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
       >
-        <Typography variant="h4" color="textPrimary" gutterBottom>
-          NurseDashboard - Coming Soon
-        </Typography>
-        <Typography variant="body1" color="textSecondary" paragraph>
-          We are currently working on the development of the dashboard. It will
-          be available soon. Thank you for your patience.
-        </Typography>
-        <Box sx={{ marginTop: 2 }}>
-          <Button variant="contained" color="primary" component={Link} to="/">
-            Go Back to Home
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Typography color="error" align="center">
+        {error}
+      </Typography>
+    );
+  }
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <Typography variant="h4" gutterBottom>
+        Nurse Dashboard - Bed Overview
+      </Typography>
+      <Grid2 container spacing={3}>
+        {beds.slice(0, 10).map((bed) => (
+          <Grid2 key={bed.id}>
+            <BedCard bed={bed} />
+          </Grid2>
+        ))}
+      </Grid2>
+    </div>
   );
 };
 
-export default DashboardComingSoon;
+export default NurseDashboard;
