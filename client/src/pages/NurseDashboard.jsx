@@ -11,6 +11,9 @@ import {
   DialogActions,
   TextField,
   MenuItem,
+  Snackbar,
+  Alert,
+  Skeleton,
 } from "@mui/material";
 import BedCard from "../components/BedCard";
 
@@ -19,6 +22,7 @@ const NurseDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [selectedBed, setSelectedBed] = useState(null);
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -28,43 +32,59 @@ const NurseDashboard = () => {
     admitDateTime: "",
     contactDetails: "",
     frequencyMeasure: "",
-    bedId: "",
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
-    const fetchBeds = async () => {
-      const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
-      try {
-        const response = await axios.get(`${BASE_URL}/beds`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setBeds(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
     fetchBeds();
   }, []);
 
+  const fetchBeds = async () => {
+    const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+    try {
+      const response = await axios.get(`${BASE_URL}/beds`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setBeds(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  const handleAssignBed = (bedData) => {
+    setSelectedBed(bedData);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedBed(null);
+  };
+
   const handleSubmit = async () => {
-    if (
-      !formData.fullName ||
-      !formData.age ||
-      !formData.birthDate ||
-      !formData.sex ||
-      !formData.condition ||
-      !formData.contactDetails ||
-      !formData.frequencyMeasure
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+    const missingFields = [];
+
+    if (!formData.fullName) missingFields.push("Full Name");
+    if (!formData.age) missingFields.push("Age");
+    if (!formData.birthDate) missingFields.push("Birth Date");
+    if (!formData.sex) missingFields.push("Sex");
+    if (!formData.condition) missingFields.push("Condition");
+    if (!formData.contactDetails) missingFields.push("Contact Details");
+    if (!formData.frequencyMeasure) missingFields.push("Frequency Measure");
+
+    if (missingFields.length > 0) {
+      const missingFieldsMessage = missingFields.join("\n");
+      setSnackbarMessage(`Please fill in the following required fields:\n\n${missingFieldsMessage}`);
+      setSnackbarOpen(true);
+      return false;
     }
 
-    const patientData = {
+    const dataToSubmit = {
       fullName: formData.fullName,
       age: formData.age,
       birthDate: formData.birthDate,
@@ -72,7 +92,7 @@ const NurseDashboard = () => {
       condition: formData.condition,
       contactDetails: formData.contactDetails,
       frequencyMeasure: formData.frequencyMeasure,
-      bedId: formData.bedId || "",
+      bedId: selectedBed.id,
     };
 
     try {
@@ -80,18 +100,23 @@ const NurseDashboard = () => {
       const response = await fetch(`${BASE_URL}/assign`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patientData),
+        body: JSON.stringify({ patientData: dataToSubmit }),
       });
+
+      console.log("🚀 ~ handleSubmit ~ response:", response)
 
       if (!response.ok) {
         throw new Error("Failed to assign bed.");
       }
 
-      alert("Bed assigned successfully.");
+      setSnackbarMessage("Bed assigned successfully.");
+      setSnackbarOpen(true);
       setOpen(false);
+      await fetchBeds();
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error assigning bed.");
+      console.log("🚀 ~ handleSubmit ~ error:", error)
+      setSnackbarMessage("Error assigning bed.");
+      setSnackbarOpen(true);
     }
   };
 
@@ -99,12 +124,14 @@ const NurseDashboard = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   if (loading) {
     return (
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
-      >
-        <CircularProgress />
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
+        <CircularProgress/>
       </div>
     );
   }
@@ -122,25 +149,17 @@ const NurseDashboard = () => {
       <Typography variant="h4" gutterBottom>
         Nurse Dashboard - Bed Overview
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setOpen(true)}
-        sx={{ textTransform: "none" }}
-      >
-        Assign Bed
-      </Button>
 
       <Grid2 container spacing={3} style={{ marginTop: "20px" }}>
         {beds.slice(0, 10).map((bed) => (
           <Grid2 key={bed.id}>
-            <BedCard bed={bed} />
+            <BedCard bed={bed} assignBed={handleAssignBed} />
           </Grid2>
         ))}
       </Grid2>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Assign Bed</DialogTitle>
+      <Dialog open={open && !!selectedBed} onClose={handleClose}>
+        <DialogTitle>Assign patient to {selectedBed?.bedNumber}</DialogTitle>
         <DialogContent>
           <TextField
             label="Full Name"
@@ -230,29 +249,30 @@ const NurseDashboard = () => {
             <MenuItem value="Yellow">Yellow</MenuItem>
             <MenuItem value="Brown">Brown</MenuItem>
           </TextField>
-          <TextField
-            label="Bed ID"
-            name="bedId"
-            fullWidth
-            value={formData.bedId}
-            margin="dense"
-            onChange={handleChange}
-            required
-          />
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button
             onClick={handleSubmit}
             color="primary"
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-            Assign
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={error ? "error" : "success"}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
