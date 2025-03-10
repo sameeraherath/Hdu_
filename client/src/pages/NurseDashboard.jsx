@@ -1,16 +1,39 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Typography, Grid2, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  CircularProgress,
+  Grid2,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem,
+} from "@mui/material";
 import BedCard from "../components/BedCard";
 
 const NurseDashboard = () => {
   const [beds, setBeds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    age: "",
+    birthDate: "",
+    sex: "",
+    condition: "",
+    admitDateTime: "",
+    contactDetails: "",
+    frequencyMeasure: "",
+    bedId: "",
+  });
 
   useEffect(() => {
-    const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
     const fetchBeds = async () => {
+      const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
       try {
         const response = await axios.get(`${BASE_URL}/beds`, {
           headers: {
@@ -20,14 +43,61 @@ const NurseDashboard = () => {
         setBeds(response.data);
         setLoading(false);
       } catch (err) {
-        setError(err);
+        setError(err.message);
         setLoading(false);
-        console.log(err);
       }
     };
-
     fetchBeds();
   }, []);
+
+  const handleSubmit = async () => {
+    if (
+      !formData.fullName ||
+      !formData.age ||
+      !formData.birthDate ||
+      !formData.sex ||
+      !formData.condition ||
+      !formData.contactDetails ||
+      !formData.frequencyMeasure
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const patientData = {
+      fullName: formData.fullName,
+      age: formData.age,
+      birthDate: formData.birthDate,
+      sex: formData.sex,
+      condition: formData.condition,
+      contactDetails: formData.contactDetails,
+      frequencyMeasure: formData.frequencyMeasure,
+      bedId: formData.bedId || "",
+    };
+
+    try {
+      const BASE_URL = `${import.meta.env.VITE_API_URL}/api/beds`;
+      const response = await fetch(`${BASE_URL}/assign`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patientData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to assign bed.");
+      }
+
+      alert("Bed assigned successfully.");
+      setOpen(false);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error assigning bed.");
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   if (loading) {
     return (
@@ -48,17 +118,141 @@ const NurseDashboard = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "25px" }}>
       <Typography variant="h4" gutterBottom>
         Nurse Dashboard - Bed Overview
       </Typography>
-      <Grid2 container spacing={3}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpen(true)}
+        sx={{ textTransform: "none" }}
+      >
+        Assign Bed
+      </Button>
+
+      <Grid2 container spacing={3} style={{ marginTop: "20px" }}>
         {beds.slice(0, 10).map((bed) => (
           <Grid2 key={bed.id}>
             <BedCard bed={bed} />
           </Grid2>
         ))}
       </Grid2>
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Assign Bed</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Full Name"
+            name="fullName"
+            fullWidth
+            value={formData.fullName}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            label="Age"
+            name="age"
+            type="number"
+            fullWidth
+            value={formData.age}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            label="Birth Date"
+            name="birthDate"
+            type="date"
+            fullWidth
+            value={formData.birthDate}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            select
+            label="Sex"
+            name="sex"
+            fullWidth
+            value={formData.sex}
+            margin="dense"
+            onChange={handleChange}
+            required
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+          </TextField>
+          <TextField
+            label="Condition"
+            name="condition"
+            multiline
+            rows={3}
+            fullWidth
+            value={formData.condition}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            label="Admit Date & Time"
+            name="admitDateTime"
+            type="datetime-local"
+            fullWidth
+            value={formData.admitDateTime}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            label="Contact Details"
+            name="contactDetails"
+            fullWidth
+            value={formData.contactDetails}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            select
+            label="Frequency Measure"
+            name="frequencyMeasure"
+            fullWidth
+            value={formData.frequencyMeasure}
+            margin="dense"
+            onChange={handleChange}
+            required
+          >
+            <MenuItem value="Red">Red</MenuItem>
+            <MenuItem value="Green">Green</MenuItem>
+            <MenuItem value="Blue">Blue</MenuItem>
+            <MenuItem value="Yellow">Yellow</MenuItem>
+            <MenuItem value="Brown">Brown</MenuItem>
+          </TextField>
+          <TextField
+            label="Bed ID"
+            name="bedId"
+            fullWidth
+            value={formData.bedId}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            variant="contained"
+            sx={{ textTransform: "none" }}
+          >
+            Assign
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
