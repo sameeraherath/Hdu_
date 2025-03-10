@@ -11,6 +11,7 @@ import {
   DialogActions,
   TextField,
   MenuItem,
+  InputLabel,
 } from "@mui/material";
 import BedCard from "../components/BedCard";
 
@@ -31,9 +32,10 @@ const NurseDashboard = () => {
     bedId: "",
   });
 
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+
   useEffect(() => {
     const fetchBeds = async () => {
-      const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
       try {
         const response = await axios.get(`${BASE_URL}/beds`, {
           headers: {
@@ -41,14 +43,14 @@ const NurseDashboard = () => {
           },
         });
         setBeds(response.data);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
     fetchBeds();
-  }, []);
+  }, [BASE_URL]);
 
   const handleSubmit = async () => {
     if (
@@ -57,6 +59,7 @@ const NurseDashboard = () => {
       !formData.birthDate ||
       !formData.sex ||
       !formData.condition ||
+      !formData.admitDateTime ||
       !formData.contactDetails ||
       !formData.frequencyMeasure
     ) {
@@ -65,21 +68,18 @@ const NurseDashboard = () => {
     }
 
     const patientData = {
-      fullName: formData.fullName,
-      age: formData.age,
-      birthDate: formData.birthDate,
-      sex: formData.sex,
-      condition: formData.condition,
-      contactDetails: formData.contactDetails,
-      frequencyMeasure: formData.frequencyMeasure,
+      ...formData,
       bedId: formData.bedId || "",
     };
 
     try {
-      const BASE_URL = `${import.meta.env.VITE_API_URL}/api/beds`;
-      const response = await fetch(`${BASE_URL}/assign`, {
+      console.log("D-Log ** patientData", patientData);
+      const response = await fetch(`${BASE_URL}/beds/assign`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(patientData),
       });
 
@@ -89,6 +89,14 @@ const NurseDashboard = () => {
 
       alert("Bed assigned successfully.");
       setOpen(false);
+
+      // Refresh the bed list after assignment
+      const updatedBeds = await axios.get(`${BASE_URL}/beds`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setBeds(updatedBeds.data);
     } catch (error) {
       console.error("Error:", error);
       alert("Error assigning bed.");
@@ -170,7 +178,13 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
           />
+
           <TextField
             select
             label="Sex"
@@ -204,6 +218,11 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
           />
           <TextField
             label="Contact Details"
