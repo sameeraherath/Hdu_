@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-import BedMySQL from "../models/BedMySQL.js";
-import PatientMySQL from "../models/PatientMySQL.js";
-import UserMySQL from "../models/UserMySQL.js";
+import defineBed from "../models/BedMySQL.js";
+import definePatient from "../models/PatientMySQL.js";
+import defineUser from "../models/UserMySQL.js";
 
 dotenv.config();
 
@@ -18,19 +18,23 @@ const sequelize = new Sequelize(
   }
 );
 
-const connectMySql = async () => {
-  const UserMySQL = defineUser(sequelize);
-  const PatientMySQL = definePatient(sequelize);
-  const BedMySQL = defineBed(sequelize);
+const BedMySQL = defineBed(sequelize);
+const PatientMySQL = definePatient(sequelize);
+const UserMySQLModel = defineUser(sequelize);
 
+BedMySQL.belongsTo(PatientMySQL, { foreignKey: "patientId" });
+PatientMySQL.hasMany(BedMySQL, { foreignKey: "patientId" });
+
+const connectMySql = async () => {
   try {
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
+    console.log("Database connection established successfully.");
 
-    await UserMySQL.sync({ alter: true });
-    await BedMySQL.sync({ alter: true });
     await PatientMySQL.sync({ alter: true });
-    // Seed initial patients
+    await BedMySQL.sync({ alter: true });
+    await UserMySQLModel.sync({ alter: true });
+
+    const patientCount = await PatientMySQL.count();
     if (patientCount === 0) {
       const initialPatients = [
         {
@@ -80,20 +84,18 @@ const connectMySql = async () => {
         },
       ];
       await PatientMySQL.bulkCreate(initialPatients);
-      console.log("Initial patients created.");
+      console.log("Initial patients seeded.");
     }
-
-    // Seed initial beds
 
     const bedCount = await BedMySQL.count();
     if (bedCount === 0) {
       const patients = await PatientMySQL.findAll({ limit: 5 });
       const initialBeds = Array.from({ length: 10 }, (_, i) => ({
         bedNumber: `B${i + 1}`,
-        patientId: i < 5 ? patients[i].id : null,
+        patientId: i < patients.length ? patients[i].id : null,
       }));
       await BedMySQL.bulkCreate(initialBeds);
-      console.log("Initial beds created.");
+      console.log("Initial beds seeded.");
     }
   } catch (error) {
     console.error("Unable to connect to the database:", error);
@@ -101,4 +103,4 @@ const connectMySql = async () => {
   }
 };
 
-export { sequelize, connectMySql };
+export { sequelize, connectMySql, BedMySQL, PatientMySQL, UserMySQLModel };

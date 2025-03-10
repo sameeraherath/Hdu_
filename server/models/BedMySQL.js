@@ -9,7 +9,7 @@ const defineBed = (sequelize) => {
       patientId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: { model: "Patients", key: "id" },
+        references: { model: "patients", key: "id" },
       },
     },
     { timestamps: true, tableName: "beds" }
