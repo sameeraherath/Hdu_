@@ -2,7 +2,8 @@ import { Card, CardContent, Typography, Chip } from "@mui/material";
 import { styled } from "@mui/system";
 
 const StyledCard = styled(Card)(({ theme, occupied }) => ({
-  minWidth: 200,
+  width: "315px",
+  height: "135px",
   margin: theme.spacing(2),
   backgroundColor: occupied ? "#ffebee" : "#e8f5e9",
   transition: "0.3s",
