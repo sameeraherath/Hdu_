@@ -44,7 +44,7 @@ export async function register(req, res) {
 
     const payload = { user: { id: user.id, role: user.role } };
 
-    sign(payload, 'aec1299fdd5bec01a940915dc7f6ac5a170087584176fba8ee000a5f8ec4cdfe5e445150d14391c4dd0f195887e3e26891abc29fa4bdd65702b4acdf31f9eddd', { expiresIn: "1h" }, (err, token) => {
+    sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" }, (err, token) => {
       if (err) throw err;
       res.json({ token, role: user.role });
     });
@@ -69,7 +69,7 @@ export async function login(req, res) {
 
     const payload = { user: { id: user.id, role: user.role } };
 
-    sign(payload, 'aec1299fdd5bec01a940915dc7f6ac5a170087584176fba8ee000a5f8ec4cdfe5e445150d14391c4dd0f195887e3e26891abc29fa4bdd65702b4acdf31f9eddd', { expiresIn: "1h" }, (err, token) => {
+    sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" }, (err, token) => {
       if (err) throw err;
       res.json({ token, role: user.role });
     });
