@@ -1,3 +1,4 @@
+import { Card, CardContent, Typography, Chip } from "@mui/material";
 import { styled } from "@mui/system";
 
 const StyledCard = styled(Card)(({ theme, occupied }) => ({
@@ -11,11 +12,11 @@ const StyledCard = styled(Card)(({ theme, occupied }) => ({
   },
 }));
 
-
+const BedCard = ({ bed }) => {
   const isOccupied = bed.patientId !== null;
 
   return (
-    <StyledCard occupied={isOccupied.toString()}>
+    <StyledCard occupied={isOccupied}>
       <CardContent>
         <Typography variant="h6" color="textPrimary">
           Bed Number: {bed.bedNumber}
@@ -26,21 +27,19 @@ const StyledCard = styled(Card)(({ theme, occupied }) => ({
           size="small"
           style={{ marginBottom: "10px" }}
         />
-        {isOccupied &&
-
-            <>
-              <Typography variant="body1" color="textSecondary">
-                Patient Name: {bed.patientName}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Patient ID: {bed.patientId}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Condition: {bed.patient.condition}
-              </Typography>
-            </>
-
-          )}
+        {isOccupied && (
+          <>
+            <Typography variant="body1" color="textSecondary">
+              Patient Name: {bed.patientName}
+            </Typography>
+            <Typography variant="body1" color="textSecondary">
+              Patient ID: {bed.patientId}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Condition: {bed.patient?.condition}
+            </Typography>
+          </>
+        )}
       </CardContent>
     </StyledCard>
   );

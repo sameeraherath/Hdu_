@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Typography,
   CircularProgress,
-  Grid2,
+  Grid,
   Button,
   Dialog,
   DialogTitle,
@@ -11,7 +11,6 @@ import {
   DialogActions,
   TextField,
   MenuItem,
-
 } from "@mui/material";
 import BedCard from "../components/BedCard";
 
@@ -20,7 +19,6 @@ const NurseDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -30,12 +28,77 @@ const NurseDashboard = () => {
     admitDateTime: "",
     contactDetails: "",
     frequencyMeasure: "",
+    bedId: "",
+  });
+
+  const BASE_URL = import.meta.env.VITE_API_URL + "/api";
+
+  useEffect(() => {
+    const fetchBeds = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/beds`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setBeds(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBeds();
+  }, [BASE_URL]);
+
+  const handleSubmit = async () => {
+    if (
+      !formData.fullName ||
+      !formData.age ||
+      !formData.birthDate ||
+      !formData.sex ||
+      !formData.condition ||
+      !formData.admitDateTime ||
+      !formData.contactDetails ||
+      !formData.frequencyMeasure
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const patientData = {
+      ...formData,
+      bedId: formData.bedId || "",
+    };
+
+    try {
+      console.log("D-Log ** patientData", patientData);
+      const response = await fetch(`${BASE_URL}/beds/assign`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(patientData),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to assign bed.");
       }
 
+      alert("Bed assigned successfully.");
+      setOpen(false);
 
+      // Refresh the bed list after assignment
+      const updatedBeds = await axios.get(`${BASE_URL}/beds`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setBeds(updatedBeds.data);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error assigning bed.");
     }
   };
 
@@ -43,7 +106,12 @@ const NurseDashboard = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-
+  if (loading) {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
+      >
+        <CircularProgress />
       </div>
     );
   }
@@ -61,17 +129,25 @@ const NurseDashboard = () => {
       <Typography variant="h4" gutterBottom>
         Nurse Dashboard - Bed Overview
       </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpen(true)}
+        sx={{ textTransform: "none" }}
+      >
+        Assign Bed
+      </Button>
 
-
-      <Grid2 container spacing={3} style={{ marginTop: "20px" }}>
+      <Grid container spacing={3} style={{ marginTop: "20px" }}>
         {beds.slice(0, 10).map((bed) => (
-          <Grid2 key={bed.id}>
-
-          </Grid2>
+          <Grid item key={bed.id} xs={12} sm={6} md={4}>
+            <BedCard bed={bed} />
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
 
-
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Assign Bed</DialogTitle>
         <DialogContent>
           <TextField
             label="Full Name"
@@ -101,7 +177,10 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
-
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
           <TextField
             select
             label="Sex"
@@ -135,7 +214,9 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
-
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Contact Details"
@@ -162,14 +243,29 @@ const NurseDashboard = () => {
             <MenuItem value="Yellow">Yellow</MenuItem>
             <MenuItem value="Brown">Brown</MenuItem>
           </TextField>
+          <TextField
+            label="Bed ID"
+            name="bedId"
+            fullWidth
+            value={formData.bedId}
+            margin="dense"
+            onChange={handleChange}
+            required
+          />
+        </DialogContent>
 
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
           <Button
             onClick={handleSubmit}
             color="primary"
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-
+            Assign
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
