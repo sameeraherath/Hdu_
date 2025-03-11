@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Typography,
   CircularProgress,
-  Grid,
+  Grid2,
   Button,
   Dialog,
   DialogTitle,
@@ -60,36 +60,34 @@ const NurseDashboard = () => {
       !formData.condition ||
       !formData.admitDateTime ||
       !formData.contactDetails ||
-      !formData.frequencyMeasure
+      !formData.frequencyMeasure ||
+      !formData.bedId
     ) {
       alert("Please fill in all required fields.");
       return;
     }
 
-    const patientData = {
-      ...formData,
-      bedId: formData.bedId || "",
-    };
+    const { bedId, ...patientData } = formData;
 
     try {
-      console.log("D-Log ** patientData", patientData);
+      console.log("D-Log ** Request Body:", { bedId, patientData });
       const response = await fetch(`${BASE_URL}/beds/assign`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(patientData),
+        body: JSON.stringify({ bedId, patientData }), // Correct structure
       });
 
       if (!response.ok) {
-        throw new Error("Failed to assign bed.");
+        const errorData = await response.json();
+        throw new Error(errorData.msg || "Failed to assign bed.");
       }
 
       alert("Bed assigned successfully.");
       setOpen(false);
 
-      // Refresh the bed list after assignment
       const updatedBeds = await axios.get(`${BASE_URL}/beds`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -98,10 +96,9 @@ const NurseDashboard = () => {
       setBeds(updatedBeds.data);
     } catch (error) {
       console.error("Error:", error);
-      alert("Error assigning bed.");
+      alert(`Error assigning bed: ${error.message}`);
     }
   };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -138,13 +135,13 @@ const NurseDashboard = () => {
         Assign Bed
       </Button>
 
-      <Grid container spacing={3} style={{ marginTop: "20px" }}>
+      <Grid2 container spacing={3} style={{ marginTop: "20px" }}>
         {beds.slice(0, 10).map((bed) => (
-          <Grid item key={bed.id} xs={12} sm={6} md={4}>
+          <Grid2 key={bed.id}>
             <BedCard bed={bed} />
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
 
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Assign Bed</DialogTitle>
@@ -177,8 +174,10 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
-            InputLabelProps={{
-              shrink: true,
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
             }}
           />
           <TextField
@@ -214,8 +213,10 @@ const NurseDashboard = () => {
             margin="dense"
             onChange={handleChange}
             required
-            InputLabelProps={{
-              shrink: true,
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
             }}
           />
           <TextField
