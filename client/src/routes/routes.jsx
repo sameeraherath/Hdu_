@@ -20,6 +20,7 @@ const ProtectedRoute = ({ role, children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/landing" element={<LandingPage />} />
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

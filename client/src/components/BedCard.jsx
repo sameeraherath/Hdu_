@@ -1,22 +1,26 @@
-import { Card, CardContent, Typography, Chip } from "@mui/material";
+import { Card, CardContent, Typography, Chip, Button } from "@mui/material";
 import { styled } from "@mui/system";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import HotelIcon from "@mui/icons-material/Hotel";
 
 const StyledCard = styled(Card)(({ theme, occupied }) => ({
   width: "315px",
-  height: "135px",
+  height: "155px",
   margin: theme.spacing(2),
   backgroundColor: occupied ? "#ffebee" : "#e8f5e9",
   transition: "0.3s",
   "&:hover": {
     boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
   },
+  cursor: "pointer",
+  borderRadius: "10px",
 }));
 
-const BedCard = ({ bed }) => {
+const BedCard = ({ bed, assignBed }) => {
   const isOccupied = bed.patientId !== null;
 
   return (
-    <StyledCard occupied={isOccupied}>
+    <StyledCard occupied={isOccupied.toString()}>
       <CardContent>
         <Typography variant="h6" color="textPrimary">
           Bed Number: {bed.bedNumber}
@@ -27,18 +31,38 @@ const BedCard = ({ bed }) => {
           size="small"
           style={{ marginBottom: "10px" }}
         />
-        {isOccupied && (
+        {isOccupied && bed.patientId ? (
           <>
-            <Typography variant="body1" color="textSecondary">
-              Patient Name: {bed.patientName}
-            </Typography>
             <Typography variant="body1" color="textSecondary">
               Patient ID: {bed.patientId}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Condition: {bed.patient?.condition}
-            </Typography>
           </>
+        ) : (
+          <div>
+            <div>
+              <Typography variant="body1" color="textSecondary">
+                No patient assigned
+              </Typography>
+            </div>
+
+            <div>
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  marginTop: "5px",
+                  fontSize: "16px",
+                  borderRadius: "20px",
+                  backgroundColor: "white",
+                  color: "primary.main",
+                }}
+                startIcon={<HotelIcon />}
+                onClick={() => assignBed(bed)}
+              >
+                Assign
+              </Button>
+            </div>
+          </div>
         )}
       </CardContent>
     </StyledCard>
