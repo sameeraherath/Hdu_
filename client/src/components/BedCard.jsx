@@ -1,22 +1,18 @@
 import { Card, CardContent, Typography, Chip, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import HotelIcon from "@mui/icons-material/Hotel";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const StyledCard = styled(Card)(({ theme, occupied }) => ({
   width: "315px",
-  height: "155px",
+  height: "159px",
   margin: theme.spacing(2),
   backgroundColor: occupied ? "#ffebee" : "#e8f5e9",
-  transition: "0.3s",
-  "&:hover": {
-    boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-  },
   cursor: "pointer",
   borderRadius: "10px",
 }));
 
-const BedCard = ({ bed, assignBed }) => {
+const BedCard = ({ bed, assignBed, deassignBed }) => {
   const isOccupied = bed.patientId !== null;
 
   return (
@@ -36,6 +32,21 @@ const BedCard = ({ bed, assignBed }) => {
             <Typography variant="body1" color="textSecondary">
               Patient ID: {bed.patientId}
             </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                marginTop: "5px",
+                fontSize: "16px",
+                borderRadius: "20px",
+                backgroundColor: "white",
+                color: "primary.main",
+              }}
+              startIcon={<RemoveIcon />}
+              onClick={() => deassignBed(bed)}
+            >
+              Deassign
+            </Button>
           </>
         ) : (
           <div>

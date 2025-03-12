@@ -17,7 +17,6 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Skeleton,
 } from "@mui/material";
 import BedCard from "../components/BedCard";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -41,6 +40,7 @@ const NurseDashboard = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchBeds();
@@ -67,9 +67,31 @@ const NurseDashboard = () => {
     setOpen(true);
   };
 
+  const deAssignBed = async (bed) => {
+    try {
+      const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+      await axios.delete(`${BASE_URL}/beds/${bed.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      fetchBeds();
+      setSnackbarMessage("Bed deassigned successfully.");
+      setSnackbarOpen(true);
+    } catch (err) {
+      setSnackbarMessage("Error deassigning bed.");
+      setSnackbarOpen(true);
+      console.error(err);
+    }
+  };
+
   const handleClose = () => {
     setOpen(false);
     setSelectedBed(null);
+  };
+
+  const closeLogoutDialog = () => {
+    setLogoutDialogOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -136,7 +158,11 @@ const NurseDashboard = () => {
     setSnackbarOpen(false);
   };
 
-  const logOut = () => {
+  const handleLogoutClick = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem("token");
     navigate("/landing");
   };
@@ -166,7 +192,7 @@ const NurseDashboard = () => {
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Nurse Dashboard - Bed Overview
           </Typography>
-          <IconButton color="inherit" onClick={logOut}>
+          <IconButton color="inherit" onClick={handleLogoutClick}>
             <LogoutIcon />
           </IconButton>
         </Toolbar>
@@ -175,7 +201,11 @@ const NurseDashboard = () => {
       <Grid2 container spacing={3} style={{ marginTop: "20px" }}>
         {beds.slice(0, 10).map((bed) => (
           <Grid2 key={bed.id}>
-            <BedCard bed={bed} assignBed={handleAssignBed} />
+            <BedCard
+              bed={bed}
+              assignBed={handleAssignBed}
+              deassignBed={deAssignBed}
+            />
           </Grid2>
         ))}
       </Grid2>
@@ -308,6 +338,19 @@ const NurseDashboard = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+
+      <Dialog open={logoutDialogOpen} onClose={closeLogoutDialog}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to log out?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeLogoutDialog}>No</Button>
+          <Button onClick={confirmLogout} color="primary" variant="contained">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
