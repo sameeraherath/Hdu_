@@ -64,3 +64,40 @@ export async function assignBed(req, res) {
     return res.status(500).json({ msg: "Server error", error: err.message });
   }
 }
+
+export async function deAssignBed(req, res) {
+  try {
+    const { bedId } = req.params;
+
+    if (!bedId) {
+      console.error("Bed ID is missing in request:", req.body);
+      return res.status(400).json({ msg: "Bed ID is required" });
+    }
+
+    const bed = await BedMySQL.findOne({ where: { id: bedId } });
+    if (!bed) {
+      console.error("Bed not found:", bedId);
+      return res.status(404).json({ msg: "Bed not found" });
+    }
+
+    if (bed.patientId === null) {
+      console.error("Bed is already unoccupied:", bedId);
+      return res.status(400).json({ msg: "Bed is already unoccupied" });
+    }
+
+    const [updatedCount] = await BedMySQL.update(
+      { patientId: null },
+      { where: { id: bedId } }
+    );
+
+    if (updatedCount > 0) {
+      return res.json({ msg: "Bed deassigned successfully" });
+    } else {
+      console.error("Failed to update the bed:", bedId);
+      return res.status(400).json({ msg: "Failed to deassign bed" });
+    }
+  } catch (err) {
+    console.error("deAssignBed Error:", err);
+    return res.status(500).json({ msg: "Server error", error: err.message });
+  }
+}
