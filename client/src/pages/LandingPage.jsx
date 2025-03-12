@@ -19,12 +19,16 @@ const HospitalHeroSection = () => {
                     borderRadius: "50%",
                   }}
                 />
-                <Typography variant="h4" className="text-4xl md:text-5xl">
+                <Typography
+                  variant="h5"
+                  className="text-4xl md:text-5xl"
+                  sx={{ fontWeight: "bold" }}
+                >
                   HDU Surgical Unit
                   <br />
-                  District General
+                  District General Hospital
                   <br />
-                  Hospital Kegalle
+                  Kegalle
                 </Typography>
               </Box>
 
@@ -61,7 +65,7 @@ const HospitalHeroSection = () => {
                 <img
                   src="/hero.jpg"
                   alt="hero"
-                  style={{ width: "500px", height: "440px" }}
+                  style={{ width: "515px", height: "440px" }}
                 />
               </Box>
             </div>
